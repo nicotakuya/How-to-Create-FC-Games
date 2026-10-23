@@ -31,5 +31,6 @@ pdfファイルの「How-to-Create-FC-Games.pdf」が本編です。
 
 ・「shooting」:シューティングゲーム。
 
-
 <img width="514" height="500" alt="Image" src="https://github.com/user-attachments/assets/505b1579-4044-4aba-b444-c616da0994c7" />
+
+<img width="514" height="500" alt="Image" src="https://github.com/user-attachments/assets/f7e03123-04ee-4978-9773-36dd0603882e" />
