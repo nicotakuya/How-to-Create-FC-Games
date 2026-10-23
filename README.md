@@ -13,20 +13,20 @@ pdfファイルの「How-to-Create-FC-Games.pdf」が本編です。
 
 本書に掲載しているプログラムは次の通りです。
 
-・helloworld:HELLO WORLD。
+・「helloworld」:HELLO WORLD。
 
-・demo:FCライブラリのデモプログラム。
+・「demo」:FCライブラリのデモプログラム。BMP画像の変換プログラムも含んでいます。
 
-・colortest:BGのアトリビュート設定。
+・「colortest」:BGのアトリビュート設定。
 
-・sp_attrib:スプライトのアトリビュート設定。
+・「sp_attrib」:スプライトのアトリビュート設定。
 
-・hit_sp:スプライトの衝突。
+・「hit_sp」:スプライトの衝突。
 
-・hit_bg:BGの衝突。
+・「hit_bg」:BGの衝突。
 
-・apu_pulse1:矩形波テスト。
+・「apu_pulse1」:矩形波サウンドテスト。
 
-・jumpgame:ジャンプゲーム。
+・「jumpgame」:ジャンピングアクションゲーム。
 
-・shooting:シューティングゲーム。
+・「shooting」:シューティングゲーム。
