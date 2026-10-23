@@ -30,3 +30,6 @@ pdfファイルの「How-to-Create-FC-Games.pdf」が本編です。
 ・「jumpgame」:ジャンピングアクションゲーム。
 
 ・「shooting」:シューティングゲーム。
+
+
+<img width="514" height="500" alt="Image" src="https://github.com/user-attachments/assets/505b1579-4044-4aba-b444-c616da0994c7" />
