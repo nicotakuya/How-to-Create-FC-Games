@@ -7,7 +7,7 @@ extern void waitvsync (void);  // Vブランク待ち
 
 char palette[16];  // BG用パレット(4×4色)
 
-//---- BG塗りつぶし(x,y,幅,高さ)
+//---- BG塗りつぶし(x,y,幅,高さ,タイル番号)
 void bg_fill(char x,char y,char w,char h,char ch)
 {
     char x1,y1;
