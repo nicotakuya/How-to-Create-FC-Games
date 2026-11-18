@@ -3,15 +3,13 @@
 #include "fcsub.h"     // FCライブラリ
 #include "pattern.h"   // パターンデータ
 
-extern void waitvsync (void); // Vブランク待ち
-
 void pushbutton(void);
 void title(void);
 void result(void);
 void player(char num,unsigned char x,unsigned char y);
 void coin(char num,unsigned char x,unsigned char y);
 void monster(char num,unsigned char x,unsigned char y);
-char NesMain(void);
+void NesMain(void);
 
 const char palette_bg[] = { // カラーテーブル
     C_SKYBLUE, C_BLACK , C_GREEN, C_WHITE  // BGパレット0
@@ -48,7 +46,7 @@ void pushbutton(void)
     unsigned char newbtn,oldbtn,edge;
 
     bg_printstr(8,20,(char *)strpush);   // PUSH
-    waitvsync();      // Vブランク待ち
+    ppu_vsync();      // Vブランク待ち
     sp_dmastart();    // OMA DMA転送開始
     ppu_enable(1);    // 表示を有効化
     oldbtn = 0;
@@ -57,7 +55,7 @@ void pushbutton(void)
         newbtn = controller1();   // コントローラー1入力
         if(oldbtn != newbtn) edge++;  // ボタンのエッジ検出
         oldbtn = newbtn;
-        waitvsync();     // Vブランク待ち
+        ppu_vsync();     // Vブランク待ち
         bg_scroll(0,0xef);  // BGスクロール
     }
     ppu_enable(0);   // 表示を無効化
@@ -180,7 +178,7 @@ void num_to_sp(unsigned short num)
 }
 
 // メイン関数
-char NesMain(void)
+void NesMain(void)
 {
     unsigned char i,x,y;
 
@@ -228,12 +226,11 @@ char NesMain(void)
             }
             if(gameover)gameover++;
             bgx = (bgx+1) & 511;  // BGオフセット座標
-            waitvsync();          // Vブランク待ち
+            ppu_vsync();          // Vブランク待ち
             sp_dmastart();        // OMA DMA転送開始
             bg_scroll(bgx,0xef);  // BGスクロール
         }
         result();   // リザルト
     }
-    return 0;
 }
 

@@ -3,8 +3,6 @@
 #include "fcsub.h"     // ライブラリ
 #include "pattern.h"   // タイルセット
 
-extern void waitvsync(void); // Vブランク待ち
-
 #define INIT 0
 #define RANGE 1
 #define KETA 2
@@ -62,7 +60,7 @@ char dec_value(char value,char range)
 }
 
 //---- メイン関数
-char NesMain()
+void NesMain()
 {
     unsigned short hz,tmpfreq;
     char enveloop,length,duty;
@@ -81,7 +79,7 @@ char NesMain()
         bg_printstr(5,4+i,(char *)btnname[i]);
         arg[i] = menus[i][INIT];
     }
-    waitvsync();
+    ppu_vsync();
     ppu_enable(1);    // 画面表示を有効化
     while (1){
         button = controller1();   // コントローラー1入力
@@ -128,7 +126,7 @@ char NesMain()
         }
         i = (i+1) % MENUMAX;
         num_to_str(tempstr,arg[i],menus[i][KETA]);
-        waitvsync();     // Vブランク待ち
+        ppu_vsync();     // Vブランク待ち
         bg_printstr(19,4+i,tempstr);
         if(idx_old != idx){
             bg_printch(3,4+idx_old,' ');
@@ -137,5 +135,4 @@ char NesMain()
         }
         bg_scroll(0,0);  // BGスクロール
     }
-    return 0;
 }

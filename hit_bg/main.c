@@ -3,8 +3,6 @@
 #include "fcsub.h"     // FCライブラリ
 #include "pattern.h"   // パターンデータ
 
-extern void waitvsync (void); // Vブランク待ち
-
 const char palette_bg[] = { // カラーパレット
     C_BLACK, C_GRAY , C_GREEN , C_WHITE  // BGパレット0
 };
@@ -14,7 +12,7 @@ const char palette_sp[] = { // カラーパレット
 };
 
 // メイン関数
-char NesMain(void)
+void NesMain(void)
 {
     unsigned char x,y,hit;
     char x1 = 1;
@@ -37,7 +35,7 @@ char NesMain(void)
     }
     // スプライト追加
     player = sp_append(64,96,0+1,PAL_0);
-    waitvsync();          // Vブランク待ち
+    ppu_vsync();          // Vブランク待ち
     ppu_enable(1);
     while (1){
         x = sp_getx(player);
@@ -48,7 +46,7 @@ char NesMain(void)
         x /= 8;
         y /= 8;
         adr = 0x2000+x+((unsigned short)y*32);
-        waitvsync();          // Vブランク待ち
+        ppu_vsync();          // Vブランク待ち
         sp_dmastart();        // OMA DMA転送開始
         ppu_address( adr );
         hit = PPUDATA;        // ネームテーブルの読み取り
@@ -56,6 +54,5 @@ char NesMain(void)
         bg_printstr(19,20,tmpstr);  // 衝突結果
         bg_scroll(0,0);       // BGスクロール
     }
-    return 0;
 }
 

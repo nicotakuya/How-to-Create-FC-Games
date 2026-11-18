@@ -3,12 +3,10 @@
 #include "fcsub.h"     // FCライブラリ
 #include "pattern.h"   // パターンデータ
 
-extern void waitvsync (void); // Vブランク待ち
-
 char x1[32],y1[32];   // 移動量
 
 // メイン関数
-char NesMain(void)
+void NesMain(void)
 {
     char num;
     unsigned char x,y,tile;
@@ -39,7 +37,7 @@ char NesMain(void)
         // SP追加(0x1000番地以降のタイル画像は+1)
         sp_append(x,y,(num*8)+1,PAL_0);
     }
-    waitvsync();      // Vブランク待ち
+    ppu_vsync();      // Vブランク待ち
     ppu_enable(1);    // 表示を有効化
 
     num = 0;  // スプライト番号
@@ -58,9 +56,8 @@ char NesMain(void)
         sp_anime(num);    // アニメ表示
         num = (num+1) % 32;  // スプライト番号を切り替え
         bgx = (bgx+1) & 511; // BGオフセット座標
-        waitvsync();        // Vブランク待ち
+        ppu_vsync();        // Vブランク待ち
         sp_dmastart();      // OMA DMA転送開始
         bg_scroll(bgx,0);   // BGスクロール
     }
-    return 0;
 }

@@ -1,7 +1,7 @@
 ; startup.asm
 .setcpu        "6502"
 .autoimport    on
-.IMPORTZP    sp
+.IMPORTZP    c_sp
 .global    _NesMain
 
 .segment "HEADER"           ; iNESヘッダ(16 Bytes)
@@ -15,13 +15,13 @@
 
 .segment "STARTUP"     ; リセット割り込み
 .proc    Reset
-    sei
+    sei                ; 割り込み禁止
     ldx    #$ff        ; スタックポインタ初期化1
     txs
     lda    #$ff        ; スタックポインタ初期化2
-    sta    sp
+    sta    c_sp
     lda    #$03
-    sta    sp + 1
+    sta    c_sp + 1
     jsr    _NesMain    ; メイン関数を呼び出す
 .endproc
 

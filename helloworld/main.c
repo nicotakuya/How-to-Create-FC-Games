@@ -2,11 +2,11 @@
 // by Takuya Matsubara
 #define PPUCTRL      *(char*)0x2000    // PPU制御レジスタ
 #define PPUMASK      *(char*)0x2001    // PPUマスクレジスタ
+#define PPUSTATUS    *(char*)0x2002    // PPUステータスレジスタ
 #define PPUSCROLL    *(char*)0x2005    // PPUスクロールレジスタ
 #define PPUADDR      *(char*)0x2006    // PPUアドレスレジスタ
 #define PPUDATA      *(char*)0x2007    // PPUデータレジスタ
 
-extern void waitvsync (void); // Vブランク待ち
 
 // BG用 パターンテーブル
 const unsigned char patternbg[] = {
@@ -105,21 +105,25 @@ void bg_scroll(unsigned char x, unsigned char y)
     PPUCTRL = 0x08;  // 画面Aを選択
 }
 
+// Vブランクを待つ
+void ppu_vsync(void)
+{
+    while((PPUSTATUS & (1<<7))==0);    // bit7が0の場合、画面描画中
+}
 
 // メイン関数
-char NesMain()
+void NesMain()
 {
-    waitvsync();        // Vブランク待ち
+    ppu_vsync();        // Vブランク待ち
     ppu_pattern_init(); // パターンテーブル初期化
     ppu_pattern((unsigned char *)patternbg,'A','Z'-'A'+1);  // BGパターンテーブル
     ppu_palette((char *)palette,0,1); // BGカラーパレット設定
     bg_cls();            // BGの初期化
     bg_printstr(10,14,"HELLO WORLD");
-    waitvsync();         // Vブランク待ち
+    ppu_vsync();        // Vブランク待ち
     PPUMASK = (1<<3)+6;  // 表示の有効化(bit3=BG)
     bg_scroll(0, 0);     // BGスクロール設定
     while(1){   // メインループ
-        waitvsync();     // Vブランク待ち
+        ppu_vsync();        // Vブランク待ち
     }
-    return 0;
 }

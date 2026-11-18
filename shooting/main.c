@@ -3,8 +3,6 @@
 #include "fcsub.h"     // ファミコン用ライブラリ
 #include "pattern.h"   // パターンデータ
 
-extern void waitvsync (void); // Vブランク待ち
-
 void pushbutton(void);
 void title(void);
 void result(void);
@@ -13,7 +11,7 @@ void bakuhatu(char num,unsigned char x,unsigned char y);
 void beam(char num,unsigned char x,unsigned char y);
 void myshot(char num,unsigned char x,unsigned char y);
 void enemy(char num,unsigned char x,unsigned char y);
-char NesMain(void);
+void NesMain(void);
 
 const char palette[] = { // カラーテーブル
     C_BLACK,C_BLUE    ,C_BLUE2   ,C_WHITE  , // SPパレット0
@@ -49,7 +47,7 @@ void pushbutton(void)
 {
     unsigned char newbtn,oldbtn,edge;
     bg_printstr(8,20,(char *)strpush);   // PUSH
-    waitvsync();      // Vブランク待ち
+    ppu_vsync();      // Vブランク待ち
     sp_dmastart();    // OMA DMA転送開始
     bg_scroll(0,0);   // BGスクロール
     ppu_enable(1);    // 表示を有効化
@@ -59,7 +57,7 @@ void pushbutton(void)
         newbtn = controller1();   // コントローラー1入力
         if(oldbtn != newbtn) edge++;  // ボタンのエッジ検出
         oldbtn = newbtn;
-        waitvsync();     // Vブランク待ち
+        ppu_vsync();     // Vブランク待ち
         bg_scroll(0,0);  // BGスクロール
     }
     ppu_enable(0);    // 表示を無効化
@@ -271,7 +269,7 @@ void enemy(char num,unsigned char x,unsigned char y)
 }
 
 // メイン関数
-char NesMain(void)
+void NesMain(void)
 {
     unsigned char i,x,y;
     fc_init();      // 全機能の初期化
@@ -322,11 +320,10 @@ char NesMain(void)
             if(gameover)gameover++;
             bgy--;
             if(bgy == 0xff)bgy=0xef;
-            waitvsync();          // Vブランク待ち
+            ppu_vsync();          // Vブランク待ち
             sp_dmastart();        // OMA DMA転送開始
             bg_scroll(0,bgy);     // BGスクロール
         }
         result();   // リザルト
     }
-    return 0;
 }

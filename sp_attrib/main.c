@@ -3,14 +3,12 @@
 #include "fcsub.h"     // FCライブラリ
 #include "pattern.h"   // パターンデータ
 
-extern void waitvsync (void); // Vブランク待ち
-
 const char palette[] = { // カラーパレット
     C_BLACK, C_BLUE  , C_RED   , C_YELLOW // SPパレット0
 };
 
 // メイン関数
-char NesMain(void)
+void NesMain(void)
 {
     unsigned char x,y;
     unsigned char sp1,sp2,sp3,sp4,sp5;
@@ -40,12 +38,11 @@ char NesMain(void)
     // スプライト追加 BGの奥に表示
     sp5 = sp_append(64,128,0+1,PAL_0+ATR_BEHIND);
 
-    waitvsync();          // Vブランク待ち
+    ppu_vsync();          // Vブランク待ち
     ppu_enable(1);        // 表示有効化
     while (1){
-        waitvsync();      // Vブランク待ち
+        ppu_vsync();      // Vブランク待ち
         sp_dmastart();    // OMA DMA転送開始
         bg_scroll(0,0);   // BGスクロール
     }
-    return 0;
 }

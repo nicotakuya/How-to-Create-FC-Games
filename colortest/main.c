@@ -3,8 +3,6 @@
 #include "fcsub.h"     // FCライブラリ
 #include "pattern.h"   // パターンデータ
 
-extern void waitvsync (void);  // Vブランク待ち
-
 char palette[16];  // BG用パレット(4×4色)
 
 //---- BG塗りつぶし(x,y,幅,高さ,タイル番号)
@@ -44,7 +42,7 @@ void screen_init(void)
         tempstr[4] = '0'+pal;
         bg_printstr(x,y,tempstr);
     }
-    waitvsync();      // Vblank待ち
+    ppu_vsync();      // Vblank待ち
     ppu_enable(1);    // 表示ON
 }
 
@@ -55,7 +53,7 @@ void palette_change(char htemp,char btemp)
     char x,y;
     char tempstr[5]="0x__";
 
-    waitvsync();      // Vblank待ち
+    ppu_vsync();      // Vblank待ち
     ppu_enable(0);    // 表示OFF
     for(pal=0; pal<4; pal++){
         for(i=0; i<3; i++){
@@ -71,12 +69,12 @@ void palette_change(char htemp,char btemp)
     // パレット設定
     palette[0] = 0x0F;
     ppu_palette((char *)palette,PAL_0,4);
-    waitvsync();      // Vblank待ち
+    ppu_vsync();      // Vblank待ち
     ppu_enable(1);    // 表示ON
 }
 
 // メイン
-char NesMain()
+void NesMain()
 {
     unsigned char loopcnt = 0;
     char hue = 0;     // 色の種類
@@ -97,8 +95,7 @@ char NesMain()
             }
             palette_change(hue,bright);
         }
-        waitvsync();     // Vblank待ち
+        ppu_vsync();     // Vblank待ち
         bg_scroll(0, 0);
     }
-    return 0;
 }
