@@ -3,6 +3,11 @@
 .autoimport    on
 .IMPORTZP    c_sp
 .global    _NesMain
+.export    _gettick
+
+.segment "ZEROPAGE"
+
+tickcnt:    .res 1     ; チック時間
 
 .segment "HEADER"           ; iNESヘッダ(16 Bytes)
     .byte   $4E,$45,$53,$1A ; "NES" 
@@ -25,8 +30,20 @@
     jsr    _NesMain    ; メイン関数を呼び出す
 .endproc
 
+.proc    Nmi           ; NMI（Non Maskable Interrupt)
+    inc    tickcnt ; チック時間+1
+    rti
+.endproc
+
+; チック時間の取得
+; unsigned char gettick(void);
+_gettick:
+    lda tickcnt
+    ldx #$00   ; int化に備えてX=0
+    rts
+
 .segment "VECINFO"     ; ベクタテーブル
-    .word    $0000     ; NMI割り込みアドレス
+    .word    Nmi       ; NMIアドレス
     .word    Reset     ; リセット割り込みアドレス
     .word    $0000     ; IRQ割り込みアドレス
 

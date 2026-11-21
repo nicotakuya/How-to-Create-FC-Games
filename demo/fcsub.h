@@ -70,6 +70,7 @@
 #define PCTR_SP8X16 (1<<5)   // SP 8x16モード
 #define PCTR_BGP1 (1<<4) // BGパターンテーブルを0x1000番地に
 #define PCTR_SPP1 (1<<3) // SPパターンテーブルを0x1000番地に
+#define PCTR_NMI  (1<<7) // NMI有効化
 
 // PPUMASK用
 #define PMSK_SHOWSP  (1<<4)  // SPの表示

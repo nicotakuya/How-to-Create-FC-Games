@@ -1,6 +1,7 @@
 // FC LIBRARY (fcsub.c)
 // by Takuya Matsubara
 #include "fcsub.h"
+extern unsigned char gettick(void); // チック時間取得
 
 const char def_pal[] = {  // 初期化用パレット
     C_BLACK, C_GRAY0, C_GRAY1 , C_WHITE
@@ -11,6 +12,7 @@ unsigned int rndwork; // 疑似乱数
 // 全機能の初期化
 void fc_init(void)
 {
+    PPUCTRL = PCTR_NMI; // NMI有効化
     ppu_vsync();      // Vブランク待ち
     ppu_enable(0);    // 表示を無効化
     rndwork = 0x005a; // 疑似乱数のシード値を設定
@@ -143,7 +145,10 @@ void ppu_enable(char on)
 // Vブランクを待つ
 void ppu_vsync(void)
 {
-    while((PPUSTATUS & (1<<7))==0);    // bit7が0の場合、画面描画中
+    unsigned char tick;
+    tick = gettick();         // チック時間取得
+    while(tick == gettick()){ // NMI発生まで待機
+    }
 }
 
 // BGスクロール設定(X座標オフセット0～511,Y座標オフセット0～239)
@@ -151,8 +156,8 @@ void bg_scroll(unsigned short x, unsigned char y)
 {
     PPUSCROLL = (x & 0xff);   // X座標(0～255)
     PPUSCROLL = y;            // Y座標
-    PPUCTRL = PCTR_SP8X16 + ((x >> 8)& 1);
-    // SP8x16モード + X座標256以上の場合は画面B
+    PPUCTRL = PCTR_SP8X16 + ((x >> 8)& 1) + PCTR_NMI;
+    // SP8x16モード + 画面A/B選択 + NMI有効化
 }
 
 // BGキャラクタ2x2セル表示(X座標0～31,Y座標0～29,タイル番号0～255)
